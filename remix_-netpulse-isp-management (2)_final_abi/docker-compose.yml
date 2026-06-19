@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  netpulse-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=NetPulse;User Id=sa;Password=Your_Password;
+      - Redis__Configuration=cache:6379
+    ports:
+      - "5000:80"
+    depends_on:
+      - db
+      - cache
+
+  netpulse-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    ports:
+      - "3000:80"
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Your_Password
+    volumes:
+      - sql-data:/var/opt/mssql
+
+  cache:
+    image: redis:alpine
+
+  radius:
+    image: freeradius/freeradius-server
+    volumes:
+      - ./radius/config:/etc/raddb
+    depends_on:
+      - db
+
+volumes:
+  sql-data:

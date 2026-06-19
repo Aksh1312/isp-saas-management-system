@@ -1,0 +1,8 @@
+{
+  "name": "Remix: NetPulse ISP Management",
+  "description": "Enterprise-grade multi-tenant ISP subscriber and network management system with MikroTik and FreeRADIUS integration.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
